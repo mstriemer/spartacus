@@ -1,9 +1,10 @@
 define([
+  'jquery',
   'cancel',
   'log',
   'utils',
   'views/base'
-], function(cancel, log, utils, BaseView){
+], function($, cancel, log, utils, BaseView){
 
   'use strict';
 
@@ -17,6 +18,10 @@ define([
 
     handleContinue: function(e) {
       e.preventDefault();
+
+      // Doesn't really matter what happens, we want to keep working.
+      $.post(utils.apiUrl('/pin/clear-was-locked/'));
+
       // Expectation is the user has a pin to go to enter pin.
       if (app.pin.get('pin') === true) {
         app.router.navigate('enter-pin', {trigger: true});
