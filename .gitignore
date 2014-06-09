@@ -24,3 +24,4 @@ tests/captures
 public/js/templates.js
 public/js/main.min.js
 public/i18n/*
+dist

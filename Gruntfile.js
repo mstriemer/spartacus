@@ -76,6 +76,27 @@ module.exports = function(grunt) {
         dest: 'public/css/',
         ext: '.css',
       },
+      dist: {
+        options: {
+          'paths': [
+            'public/images',
+            'public/lib/css/',
+            'public/stylus/inc',
+            'public/stylus/lib',
+          ],
+          'import': [
+            'normalize-css/normalize.css',
+            'inc/vars',
+            'inc/mixins',
+            'inc/global',
+          ]
+        },
+        expand: true,
+        cwd: 'public/stylus',
+        src: ['*.styl', '!_*.styl'],
+        dest: 'dist/css/',
+        ext: '.css',
+      },
 
       styleguide: {
         options: {
@@ -181,6 +202,10 @@ module.exports = function(grunt) {
       precompile: {
         src: 'templates/*',
         dest: 'public/js/templates.js',
+      },
+      dist: {
+        src: 'templates/*',
+        dest: 'dist/js/templates.js',
       }
     },
 
@@ -239,6 +264,13 @@ module.exports = function(grunt) {
           jsVar: '_i18nAbide'
         },
       },
+      dist: {
+        dest: 'dist/i18n',
+        options: {
+          type: 'json',
+          jsVar: '_i18nAbide'
+        },
+      },
     },
 
     requirejs: {
@@ -250,6 +282,16 @@ module.exports = function(grunt) {
           baseUrl: 'public/js',
           optimize: 'uglify2',
           out: 'public/js/main.min.js'
+        })
+      },
+      dist: {
+        options: grunt.util._.merge(requireConfig, {
+          include: ['../lib/js/requirejs/require.js'],
+          findNestedDependencies: true,
+          name: 'main',
+          baseUrl: 'public/js',
+          optimize: 'uglify2',
+          out: 'dist/js/main.min.js'
         })
       }
     },
@@ -272,7 +314,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-i18n-abide');
   grunt.loadNpmTasks('grunt-express-server');
 
-
   grunt.registerTask('default', 'Does the same thing as grunt start', ['start']);
   grunt.registerTask('start', 'Run the development server',
                      ['abideCompile', 'env:dev', 'requirejs', 'jshint', 'stylus', 'clean:templates', 'nunjucks', 'express:dev', 'watch']);
@@ -282,4 +323,6 @@ module.exports = function(grunt) {
                      ['abideCompile', 'env:test', 'jshint', 'stylus', 'clean:templates', 'nunjucks', 'express:test', 'shell:unittests']);
   grunt.registerTask('uitest', 'Run UI tests with casper.\nUsage: grunt uitest [--test <file>]',
                      ['abideCompile', 'env:test', 'requirejs', 'stylus', 'clean:templates',  'nunjucks', 'clean:uitest', 'express:test', 'casper']);
+  grunt.registerTask('export', 'Export static assets for webpay',
+                     ['abideCompile:dist', 'stylus:dist', 'nunjucks:dist', 'requirejs:dist']);
 };
