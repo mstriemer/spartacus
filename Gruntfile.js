@@ -76,7 +76,7 @@ module.exports = function(grunt) {
         dest: 'public/css/',
         ext: '.css',
       },
-      dist: {
+      static: {
         options: {
           'paths': [
             'public/images',
@@ -94,7 +94,7 @@ module.exports = function(grunt) {
         expand: true,
         cwd: 'public/stylus',
         src: ['*.styl', '!_*.styl'],
-        dest: 'dist/css/',
+        dest: 'static/css/',
         ext: '.css',
       },
 
@@ -203,9 +203,9 @@ module.exports = function(grunt) {
         src: 'templates/*',
         dest: 'public/js/templates.js',
       },
-      dist: {
+      static: {
         src: 'templates/*',
-        dest: 'dist/js/templates.js',
+        dest: 'static/js/templates.js',
       }
     },
 
@@ -264,8 +264,8 @@ module.exports = function(grunt) {
           jsVar: '_i18nAbide'
         },
       },
-      dist: {
-        dest: 'dist/i18n',
+      static: {
+        dest: 'static/i18n',
         options: {
           type: 'json',
           jsVar: '_i18nAbide'
@@ -284,14 +284,14 @@ module.exports = function(grunt) {
           out: 'public/js/main.min.js'
         })
       },
-      dist: {
+      static: {
         options: grunt.util._.merge(requireConfig, {
           include: ['../lib/js/requirejs/require.js'],
           findNestedDependencies: true,
           name: 'main',
           baseUrl: 'public/js',
           optimize: 'uglify2',
-          out: 'dist/js/main.min.js'
+          out: 'static/js/main.min.js'
         })
       }
     },
@@ -324,5 +324,5 @@ module.exports = function(grunt) {
   grunt.registerTask('uitest', 'Run UI tests with casper.\nUsage: grunt uitest [--test <file>]',
                      ['abideCompile', 'env:test', 'requirejs', 'stylus', 'clean:templates',  'nunjucks', 'clean:uitest', 'express:test', 'casper']);
   grunt.registerTask('export', 'Export static assets for webpay',
-                     ['abideCompile:dist', 'stylus:dist', 'nunjucks:dist', 'requirejs:dist']);
+                     ['abideCompile:static', 'stylus:static', 'nunjucks:static', 'requirejs:static']);
 };
